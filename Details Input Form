@@ -1,0 +1,744 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Family Tree Form (Sample Details)</title>
+    <style>
+      body {
+        background-image: url("https://cdn.glitch.global/8cec9c3c-87ec-44c8-96b6-d43d777eed7a/pngtree-aesthetic-textures-in-nature-image_16268301.jpg?v=1728312112765");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+      }
+      .adopted-children-container {
+        display: flex;
+        align-items: center;
+        gap: 50px; /* Adjust gap as needed */
+      }
+      /* Sub-container for Yes/No options */
+      .yes-no-container {
+        display: flex;
+        flex-direction: row; /* Yes and No horizontally */
+        gap: 50px; /* Space between Yes and No */
+      }
+
+      .flex-container {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Controls space between label and checkbox */
+      }
+      .container {
+        width: 90%;
+        max-width: 1000px;
+        margin: 50px auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 50px;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      h2 {
+        color: #4caf50;
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        text-align: left;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        font-weight: bold;
+        color: #333;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"],
+      input[type="date"],
+      select {
+        width: 95%;
+        padding: 12px;
+        margin-top: 0px;
+        margin-bottom: 15px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      input[type="submit"],
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .buttons {
+        grid-column: span 2;
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      .not-known-checkbox {
+        margin-left: 10px;
+      }
+      .inline-container {
+        display: flex;
+        align-items: center;
+        gap: 70px;
+      }
+      .family-tree-display {
+        margin-top: 30px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        text-align: left;
+      }
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .sample-image {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Family Tree Information Form</h2>
+      <button id="openModal" onclick="openModal()">View Sample Form</button>
+
+      <!-- Modal for Sample Form Image -->
+      <div id="sampleFormModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h3>Sample Family Tree Form</h3>
+          <img
+            src="https://cdn.glitch.global/8cec9c3c-87ec-44c8-96b6-d43d777eed7a/Screenshot%202024-10-03%20184026.png?v=1728315196888"
+            class="sample-image"
+            alt="Sample Form Image"
+          />
+        </div>
+      </div>
+      <br />
+      <br />
+      <!-- Family Tree Form -->
+      <form id="familyTreeForm">
+        <!-- Name and Family Details -->
+        <label for="firstName"
+          >First Name:
+          <input type="text" id="firstName" name="firstName" required />
+        </label>
+        <label for="middleName"
+          >Middle Name (If Present):
+          <input type="text" id="middleName" name="middleName" />
+        </label>
+        <label for="lastName"
+          >Last Name:
+          <input type="text" id="lastName" name="lastName" required />
+        </label>
+        <label for="name"
+          >Full Name:
+          <input type="text" id="name" name="name" required />
+        </label>
+        <div class="inline-container">
+          <label for="familyName"
+            >Family Name:
+            <input type="text" id="familyName" name="familyName"/>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="familyNameNotKnown"
+              onchange="toggleNotKnown('familyName')"
+            />
+            Unknown
+          </label>
+        </div>
+
+        <!-- Personal Details -->
+        <label for="dob"
+          >Date of Birth:
+          <input type="date" id="dob" name="dob" required />
+        </label>
+        <label for="gender"
+          >Gender:
+          <select id="gender" name="gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+
+        <!-- Gothra and Place of Birth -->
+        <div class="flex-container">
+          <label for="gothra"
+            >Gothra:
+            <input type="text" id="gothra" name="gothra"/>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="gothraNotKnown"
+              onchange="toggleNotKnown('gothra')"
+            />
+            Unknown
+          </label>
+        </div>
+
+        <!-- Location and Additional Details -->
+        <label for="placeOfBirth"
+          >Place of Birth:
+          <input type="text" id="placeOfBirth" name="placeOfBirth" required />
+        </label>
+
+        <label for="community"
+          >Community:
+          <input type="text" id="community" name="community" />
+        </label>
+
+        <!-- Kuladevatha and Rashi (Moon Sign) -->
+        <div class="flex-container">
+          <label for="kuladevatha"
+            >Kuladevatha:
+            <input type="text" id="kuladevatha" name="kuladevatha"/>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="kuladevathaNotKnown"
+              onchange="toggleNotKnown('kuladevatha')"
+            />
+            Unknown
+          </label>
+        </div>
+
+        <div class="flex-container">
+          <label for="rashi"
+            >Rashi (Moon Sign):
+            <select id="rashi" name="rashi">
+              <option value="">Select Rashi</option>
+              <option value="Aries">Aries (Mesha)</option>
+              <option value="Taurus">Taurus (Vrishabha)</option>
+              <option value="Gemini">Gemini (Mithuna)</option>
+              <option value="Cancer">Cancer (Karka)</option>
+              <option value="Leo">Leo (Simha)</option>
+              <option value="Virgo">Virgo (Kanya)</option>
+              <option value="Libra">Libra (Tula)</option>
+              <option value="Scorpio">Scorpio (Vrishchika)</option>
+              <option value="Sagittarius">Sagittarius (Dhanu)</option>
+              <option value="Capricorn">Capricorn (Makara)</option>
+              <option value="Aquarius">Aquarius (Kumbha)</option>
+              <option value="Pisces">Pisces (Meena)</option>
+            </select>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="rashiUnknown"
+              onchange="toggleNotKnown('rashi')"
+            />Unknown
+          </label>
+        </div>
+
+        <!-- Nakshatra Field -->
+        <div class="flex-container">
+          <label for="nakshatra"
+            >Nakshatra (Star Sign):
+            <select id="nakshatra" name="nakshatra">
+              <option value="">Select Nakshatra</option>
+              <option value="Ashwini">Ashwini</option>
+              <option value="Bharani">Bharani</option>
+              <option value="Krittika">Krittika</option>
+              <option value="Rohini">Rohini</option>
+              <option value="Mrigashira">Mrigashira</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="nakshatraUnknown"
+              onchange="toggleNotKnown('nakshatra')"
+            />Unknown
+          </label>
+        </div>
+
+        <!-- Current Location -->
+        <label for="currentLocality"
+          >Current Locality:
+          <input
+            type="text"
+            id="currentLocality"
+            name="currentLocality"
+            required
+          />
+        </label>
+
+        <label for="district"
+          >District:
+          <input type="text" id="district" name="district" required />
+        </label>
+
+        <label for="state"
+          >State:
+          <input type="text" id="state" name="state" required />
+        </label>
+
+        <label for="country"
+          >Country:
+          <input type="text" id="country" name="country" required />
+        </label>
+
+        <label for="postalCode"
+          >Postal Code:
+          <input type="text" id="postalCode" name="postalCode" required />
+        </label>
+        <!-- Mother Tongue -->
+        <label for="motherTongue"
+          >Mother Tongue:
+          <input type="text" id="motherTongue" name="motherTongue" />
+        </label>
+
+        <!-- Languages Known -->
+        <label for="languagesKnown"
+          >Languages Known:
+          <input type="text" id="languagesKnown" name="languagesKnown" />
+        </label>
+
+        <!-- Dietary Preference -->
+        <label for="dietaryPreference"
+          >Dietary Preference:
+          <select id="dietaryPreference" name="dietaryPreference" required>
+            <option value="">Select Preference</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Non-Vegetarian">Non-Vegetarian</option>
+            <option value="Eggetarian">Eggetarian</option>
+          </select>
+        </label>
+
+        <!-- Family Profession -->
+        <label for="familyProfession"
+          >Family Profession (if any):
+          <input type="text" id="familyProfession" name="familyProfession" />
+        </label>
+
+        <!-- Marital Status, Spouse's Name, and Children -->
+        <label for="maritalStatus"
+          >Marital Status:
+          <select
+            id="maritalStatus"
+            name="maritalStatus"
+            onchange="toggleSpouseChildren()"
+          >
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
+            <option value="widowed">Widowed</option>
+          </select>
+        </label>
+
+        <div
+          id="spouseChildrenSection"
+          style="display: none"
+          class="flex-container"
+        >
+          <label for="spouseName"
+            >Spouse's Name:
+            <input type="text" id="spouseName" name="spouseName" />
+          </label>
+
+          <label for="numChildren"
+            >Number of Children:
+            <select
+              id="numChildren"
+              name="numChildren"
+              onchange="toggleBiologicalFather()"
+            >
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="adopted-children-container">
+          <label>Adopted Children:</label>
+          <div class="yes-no-container">
+            <label>
+              <input type="checkbox" name="adoptedChildren" value="yes" /> Yes
+            </label>
+            <label>
+              <input type="checkbox" name="adoptedChildren" value="no" /> No
+            </label>
+          </div>
+        </div>
+
+        <!-- Maternal Family Details -->
+        <fieldset>
+          <legend>Maternal Details</legend>
+          <label for="motherName"
+            >Mother's Name:
+            <input type="text" id="motherName" name="motherName" required />
+          </label>
+          <div class="inline-container">
+            <label for="mothersGothra"
+              >Mother's Gothra:
+              <input type="text" id="mothersGothra" name="mothersGothra" />
+            </label>
+            <label class="not-known-checkbox">
+              <input
+                type="checkbox"
+                id="mothersGothraNotKnown"
+                onchange="toggleNotKnown('mothersGothra')"
+              />
+              Unknown
+            </label>
+          </div>
+          <div class="flex-container">
+          <label for="motherskuladevatha"
+            >Mother's Kuladevatha:
+            <input type="text" id="motherskuladevatha" name="motherskuladevatha"/>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="motherskuladevathaNotKnown"
+              onchange="toggleNotKnown('motherskuladevatha')"
+            />
+            Unknown
+          </label>
+        </div>
+          <label for="motherSiblings"
+            >Mother's Siblings' Names:
+            <input
+              type="text"
+              id="motherSiblings"
+              name="motherSiblings"
+              placeholder="Enter names separated by commas"
+            />
+          </label>
+          <label for="maternalGrandfatherName"
+            >Maternal Grandfather's Name:
+            <input
+              type="text"
+              id="maternalGrandfatherName"
+              name="maternalGrandfatherName"
+            />
+          </label>
+          <label for="maternalGrandmotherName"
+            >Maternal Grandmother's Name:
+            <input
+              type="text"
+              id="maternalGrandmotherName"
+              name="maternalGrandmotherName"
+            />
+          </label>
+        </fieldset>
+
+        <div id="biologicalFatherSection" style="display: none">
+          <label for="biologicalFatherName"
+            >Biological Father's Name:
+            <input
+              type="text"
+              id="biologicalFatherName"
+              name="biologicalFatherName"
+            />
+          </label>
+        </div>
+
+        <!-- Paternal Family Details -->
+        <fieldset>
+          <legend>Paternal Details</legend>
+          <label for="fatherName"
+            >Father's Name:
+            <input type="text" id="fatherName" name="fatherName" required />
+          </label>
+          <div class="inline-container">
+            <label for="fathersGothra"
+              >Father's Gothra:
+              <input type="text" id="fathersGothra" name="fathersGothra" />
+            </label>
+            <label class="not-known-checkbox">
+              <input
+                type="checkbox"
+                id="fathersGothraNotKnown"
+                onchange="toggleNotKnown('fathersGothra')"
+              />
+              Unknown
+            </label>
+          </div>
+          
+          <div class="flex-container">
+          <label for="fatherskuladevatha"
+            >Father's Kuladevatha:
+            <input type="text" id="fatherskuladevatha" name="fatherskuladevatha"/>
+          </label>
+          <label class="not-known-checkbox">
+            <input
+              type="checkbox"
+              id="fatherskuladevathaNotKnown"
+              onchange="toggleNotKnown('fatherskuladevatha')"
+            />
+            Unknown
+          </label>
+        </div>
+          <label for="fatherSiblings"
+            >Father's Siblings' Names:
+            <input
+              type="text"
+              id="fatherSiblings"
+              name="fatherSiblings"
+              placeholder="Enter names separated by commas"
+            />
+          </label>
+          <label for="paternalGrandfatherName"
+            >Paternal Grandfather's Name:
+            <input
+              type="text"
+              id="paternalGrandfatherName"
+              name="paternalGrandfatherName"
+            />
+          </label>
+          <label for="paternalGrandmotherName"
+            >Paternal Grandmother's Name:
+            <input
+              type="text"
+              id="paternalGrandmotherName"
+              name="paternalGrandmotherName"
+            />
+          </label>
+        </fieldset>
+
+        <!-- Referred By -->
+        <label for="referredBy"
+          >Referred By: Member Name/ID (if any):
+          <input type="text" id="referredBy" name="referredBy" />
+        </label>
+
+        <!-- Buttons for Actions -->
+        <div class="buttons">
+          <input type="submit" value="Submit" />
+          <button type="reset">Reset</button>
+        <button id="viewDashboardButton">View Dashboard</button>
+        <button id="viewFamilyTreeButton">View Family Tree</button>
+        </div>
+        
+        <div
+          class="dashboard-display"
+          id="dashboardDisplay"
+          style="display: none"
+        >
+          <h3>Dashboard</h3>
+          <p>[Family tree Dashboard will be displayed here]</p>
+        </div>
+
+        <div
+          class="family-tree-display"
+          id="familyTreeDisplay"
+          style="display: none"
+        >
+          <h3>Family Tree</h3>
+          <p>[Family tree will be displayed here]</p>
+        </div>
+
+  <script type="module">
+          function openModal() {
+            document.getElementById("sampleFormModal").style.display = "block";
+          }
+
+          function closeModal() {
+            document.getElementById("sampleFormModal").style.display = "none";
+          }
+
+          function toggleNotKnown(field) {
+            const inputField = document.getElementById(field);
+            const checkbox = document.getElementById(field + "NotKnown");
+            inputField.disabled = checkbox.checked;
+            if (checkbox.checked) {
+              inputField.value = ""; // Clear the input when 'Not Known' is checked
+            }
+          }
+
+          function toggleCommunity() {
+            const communityField = document.getElementById("community");
+            const checkbox = document.getElementById("communityUnknown");
+            communityField.disabled = checkbox.checked;
+            if (checkbox.checked) {
+              communityField.value = ""; // Clear the input when 'Unknown' is checked
+            }
+          }
+
+          function toggleSpouseChildren() {
+            const maritalStatus =
+              document.getElementById("maritalStatus").value;
+            const spouseChildrenSection = document.getElementById(
+              "spouseChildrenSection"
+            );
+            spouseChildrenSection.style.display =
+              maritalStatus === "married" ||
+              maritalStatus === "divorced" ||
+              maritalStatus === "widowed"
+                ? "block"
+                : "none";
+          }
+
+          function toggleBiologicalFather() {
+        const numChildren = document.getElementById("numChildren").value;
+        const bioFatherSection = document.getElementById("biologicalFatherSection");
+        bioFatherSection.style.display = numChildren > 0 ? "block" : "none";
+    }
+          
+      // Event listeners for buttons to navigate to different pages
+      document.getElementById("viewDashboardButton").onclick = function () {
+        window.location.href = "dashboard.html"; // Replace with the actual dashboard URL
+      };
+
+      document.getElementById("viewFamilyTreeButton").onclick = function () {
+        window.location.href = "family-tree.html"; // Replace with the actual family tree URL
+      };
+          
+          // Send data to backend
+      const response = await fetch('http://localhost:3000/api/family', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      alert(result.message);
+    }
+    
+    
+   
+    <div id="response"></div>
+    
+    // Ensure the script is treated as a module
+    async function fetchData() {
+        let response = await fetch('https://api.example.com');
+        let data = await response.json();
+        console.log(data);
+    }
+
+    // Call the async function
+    fetchData();
+          
+    document.getElementById('userForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the form from refreshing the page
+
+        // Get the form data
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        console.log('Form data:', { name, email });
+
+        // Send the data to the server
+        try {
+            const response = await fetch('http://localhost:3000/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email }),
+            });
+
+            const result = await response.json();
+            console.log('Server response:', result);
+            document.getElementById('response').innerText = 'User added successfully!';
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('response').innerText = 'Error adding user.';
+        }
+    });
+    
+    document.getElementById("familyForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = {
+        name: document.getElementById("name").value,
+        father: document.getElementById("father").value,
+        mother: document.getElementById("mother").value,
+        spouse: document.getElementById("spouse").value,
+        children: document.getElementById("children").value.split(",") // Convert children input to array
+    };
+
+    const response = await fetch("http://localhost:8080/api/family", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+    console.log(result);
+    
+    if (result.graphData) {
+        displayFamilyTree(result.graphData);
+    }
+});
+
+// Function to visualize family tree
+function displayFamilyTree(graphData) {
+    const container = document.getElementById("familyTree");
+    container.innerHTML = ""; // Clear previous tree
+
+    graphData.nodes.forEach(node => {
+        const div = document.createElement("div");
+        div.innerText = node.name;
+        container.appendChild(div);
+    });
+
+    graphData.links.forEach(link => {
+        console.log(`${link.source} → ${link.relationship} → ${link.target}`);
+    });
+}
+
+        </script>
+      </form>
+    </div>
+  </body>
+</html>
